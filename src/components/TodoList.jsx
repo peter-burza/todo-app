@@ -3,7 +3,7 @@ import { TodoCard } from "./TodoCard";
 export function TodoList(props) {
     const { todos } = props
 
-    const tab = 'Open'
+    const tab = 'All'
     const filteredTodosList = tab === 'All' ?
         todos :
         tab === 'Open' ?
