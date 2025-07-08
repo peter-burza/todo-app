@@ -12,6 +12,7 @@ import PersonAdd from '@mui/icons-material/PersonAdd';
 import Settings from '@mui/icons-material/Settings';
 import Logout from '@mui/icons-material/Logout';
 import { useAuth } from '../context/AuthContext';
+import PersonRoundedIcon from '@mui/icons-material/PersonRounded';
 
 export default function AccountMenu() {
     const [anchorEl, setAnchorEl] = React.useState(null);
@@ -26,7 +27,7 @@ export default function AccountMenu() {
     const { logout } = useAuth()
 
     const handleLogout = () => {
-        
+
         setAnchorEl(null);
     }
 
@@ -81,10 +82,15 @@ export default function AccountMenu() {
                 transformOrigin={{ horizontal: 'right', vertical: 'top' }}
                 anchorOrigin={{ horizontal: 'right', vertical: 'bottom' }}
             >
-                {/* <MenuItem onClick={handleClose}>
-                    <Avatar /> Profile
+                <MenuItem>
+                    <ListItemIcon>
+                        <a href="#profile-section" className='no-underline flex gap-3'>
+                            <PersonRoundedIcon sx={{ color: "white" }} />
+                            <p className='text-white'>Profile</p>
+                        </a>
+                    </ListItemIcon>
                 </MenuItem>
-                <MenuItem onClick={handleClose}>
+                {/* <MenuItem onClick={handleClose}>
                     <Avatar /> My account
                 </MenuItem>
                 <Divider />
@@ -102,9 +108,9 @@ export default function AccountMenu() {
                 </MenuItem> */}
                 <MenuItem onClick={logout}>
                     <ListItemIcon>
-                        <Logout fontSize="small" sx={{color: 'white'}} />
+                        <Logout fontSize="small" sx={{ color: 'white' }} />
                     </ListItemIcon>
-                    Logout
+                    <p>Logout</p>
                 </MenuItem>
             </Menu>
         </React.Fragment>

@@ -110,6 +110,18 @@ function App() {
       <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} globalDataEntries={globalDataEntries} />
       <TodoList handleCompleteTodo={handleCompleteTodo} handleDeleteTodo={handleDeleteTodo} handleEditTodo={handleEditTodo} selectedTab={selectedTab} globalDataEntries={globalDataEntries} />
       <TodoInput handleAddTodo={handleAddTodo} />
+      {globalUser && (
+        <section id="profile-section" className="flex flex-col gap-6">
+          <div className="flex flex-col gap-1">
+            <h2 className="">Profile</h2>
+            <hr />
+          </div>
+          <div className="flex items-center gap-4">
+            <h3>Email: </h3>
+            <p>{globalUser.email}</p>
+          </div>
+        </section>
+      )}
     </>
   )
 }
