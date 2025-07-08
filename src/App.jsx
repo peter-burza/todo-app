@@ -1,16 +1,22 @@
+import Authentication from "./components/Authentication"
 import { Header } from "./components/Header"
+import Modal from "./components/Modal"
 import { Tabs } from "./components/Tabs"
 import { TodoInput } from "./components/TodoInput"
 import { TodoList } from "./components/TodoList"
 import { isStringEmpty } from './utils'
-
 import { useState, useEffect } from 'react'
+import { useAuth } from "./context/AuthContext"
+import {doc, setDoc} from 'firebase/firestore'
+import {db} from '../../firebase'
 
 function App() {
   const [todos, setTodos] = useState([
     { input: 'Hello! Add your first todo!', complete: false }
   ])
   const [selectedTab, setSelectedTab] = useState('Open')
+  const [showModal, setShowModal] = useState(false)
+  const { globalUser, globalData, setGlobalData } = useAuth()
 
   function handleAddTodo(newTodo) {
     if (isStringEmpty(newTodo)) return
@@ -49,6 +55,10 @@ function App() {
     handleSaveData(newTodoList)
   }
 
+  function handleCloseModal() {
+    setShowModal(false)
+  }
+
   useEffect(() => {
     if (!localStorage || !localStorage.getItem('todo-app')) return
     let db = JSON.parse(localStorage.getItem('todo-app'))
@@ -57,7 +67,12 @@ function App() {
 
   return (
     <>
-      <Header todos={todos} />
+      <Header todos={todos} setShowModal={setShowModal} />
+      {showModal && (
+        <Modal handleCloseModal={handleCloseModal}>
+          <Authentication handleCloseModal={handleCloseModal} />
+        </Modal>
+      )}
       <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} todos={todos} />
       <TodoList handleCompleteTodo={handleCompleteTodo} handleDeleteTodo={handleDeleteTodo} handleEditTodo={handleEditTodo} selectedTab={selectedTab} todos={todos} />
       <TodoInput handleAddTodo={handleAddTodo} />
