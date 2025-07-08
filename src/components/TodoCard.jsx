@@ -4,7 +4,7 @@ import { isStringEmpty } from '../utils'
 export function TodoCard(props) {
     const { todo, todoIndex, handleDeleteTodo, handleCompleteTodo, handleEditTodo } = props
     const [editing, setEditing] = useState(false)
-    const [editValue, setEditValue] = useState(todo.input)
+    const [editValue, setEditValue] = useState(todo[1].input)
 
     return (
         <div className="card todo-item">
@@ -18,7 +18,7 @@ export function TodoCard(props) {
                             if (isStringEmpty(editValue)) {
                                 setEditValue(todo[1].input)
                             } else {
-                                handleEditTodo(todoIndex, editValue, todo[1].complete)
+                                handleEditTodo(todo[0], editValue, todo[1].complete)
                             }
                             setEditing(false)
                         }}>

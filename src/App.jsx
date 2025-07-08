@@ -35,14 +35,7 @@ function App() {
       newTodoList[timestamp] = newTodo
       console.log(timestamp, newTodo)
 
-      // update globalData
-      setGlobalData(newTodoList)
-
-      //persist the data in the firebase firestore
-      const userRef = doc(db, 'users', globalUser.uid)
-      await setDoc(userRef, {
-        [timestamp]: newTodo
-      }, { merge: true })
+      saveDataOnFirestore(newTodoList, timestamp, newTodo)
     } catch (error) {
       console.log(error)
     }
@@ -55,19 +48,10 @@ function App() {
       completedTodo.complete = true
       newTodoList[timestamp] = completedTodo
 
-      // update globalData
-      setGlobalData(newTodoList)
-
-      //persist the data in the firebase firestore
-      const userRef = doc(db, 'users', globalUser.uid)
-      await setDoc(userRef, {
-        [timestamp]: completedTodo
-      }, { merge: true })
+      saveDataOnFirestore(newTodoList, timestamp, completedTodo)
     } catch (error) {
       console.log(error)
     }
-    // setTodos(newTodoList)
-    // handleSaveData(newTodoList)
   }
 
   async function handleDeleteTodo(timestamp) {
@@ -86,32 +70,40 @@ function App() {
     } catch (error) {
       console.log(error)
     }
+  }
 
-    // setTodos(newTodoList)
-    // handleSaveData(newTodoList)
+  async function handleEditTodo(timestamp, newValue, isComplete) {
+    const newTodoList = { ...globalData }
+    const editedTodo = { input: newValue, complete: isComplete }
+    newTodoList[timestamp] = editedTodo
+
+    saveDataOnFirestore(newTodoList, timestamp, editedTodo)
+  }
+
+  async function saveDataOnFirestore(todoList, timeStamp, todo) {
+    // update globalData
+    setGlobalData(todoList)
+
+    //persist the data in the firebase firestore
+    const userRef = doc(db, 'users', globalUser.uid)
+    await setDoc(userRef, {
+      [timeStamp]: todo
+    }, { merge: true })
   }
 
   function handleSaveData(currTodos) {
     localStorage.setItem('todo-app', JSON.stringify({ todos: currTodos }))
   }
 
-  function handleEditTodo(index, newValue, isComplete) {
-    const newTodoList = [...todos]
-    const editedTodo = { input: newValue, complete: isComplete }
-    newTodoList[index] = editedTodo
-    setTodos(newTodoList)
-    handleSaveData(newTodoList)
-  }
-
   function handleCloseModal() {
     setShowModal(false)
   }
 
-  useEffect(() => {
-    if (!localStorage || !localStorage.getItem('todo-app')) return
-    let db = JSON.parse(localStorage.getItem('todo-app'))
-    setTodos(db.todos)
-  }, [])
+  // useEffect(() => {
+  //   if (!localStorage || !localStorage.getItem('todo-app')) return
+  //   let db = JSON.parse(localStorage.getItem('todo-app'))
+  //   setTodos(db.todos)
+  // }, [])
 
   return (
     <>
