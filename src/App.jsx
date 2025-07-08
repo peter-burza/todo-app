@@ -7,7 +7,7 @@ import { TodoList } from "./components/TodoList"
 import { isStringEmpty } from './utils'
 import { useState, useEffect } from 'react'
 import { useAuth } from "./context/AuthContext"
-import { doc, setDoc } from 'firebase/firestore'
+import { doc, setDoc, updateDoc, deleteField } from 'firebase/firestore'
 import { db } from '../firebase'
 
 function App() {
@@ -27,6 +27,7 @@ function App() {
       const newTodoList = {
         ...(globalData || {})
       }
+      console.log(newTodoList)
       const newTodo = {
         input: newTodoInput,
         complete: false
@@ -39,7 +40,7 @@ function App() {
 
       //persist the data in the firebase firestore
       const userRef = doc(db, 'users', globalUser.uid)
-      const res = await setDoc(userRef, {
+      await setDoc(userRef, {
         [timestamp]: newTodo
       }, { merge: true })
     } catch (error) {
@@ -47,22 +48,47 @@ function App() {
     }
   }
 
-  function handleCompleteTodo(index) {
-    // update/edit/modify
-    let newTodoList = [...todos]
-    let completedTodo = todos[index]
-    completedTodo['complete'] = true
-    newTodoList[index] = completedTodo
-    setTodos(newTodoList)
-    handleSaveData(newTodoList)
+  async function handleCompleteTodo(timestamp) {
+    try {
+      let newTodoList = { ...globalData }
+      let completedTodo = globalData[timestamp]
+      completedTodo.complete = true
+      newTodoList[timestamp] = completedTodo
+
+      // update globalData
+      setGlobalData(newTodoList)
+
+      //persist the data in the firebase firestore
+      const userRef = doc(db, 'users', globalUser.uid)
+      await setDoc(userRef, {
+        [timestamp]: completedTodo
+      }, { merge: true })
+    } catch (error) {
+      console.log(error)
+    }
+    // setTodos(newTodoList)
+    // handleSaveData(newTodoList)
   }
 
-  function handleDeleteTodo(index) {
-    const newTodoList = todos.filter((val, valIndex) => {
-      return valIndex !== index
-    })
-    setTodos(newTodoList)
-    handleSaveData(newTodoList)
+  async function handleDeleteTodo(timestamp) {
+    try {
+      const newTodoList = { ...globalData }
+      delete newTodoList[timestamp]
+
+      // update globalData
+      setGlobalData(newTodoList)
+
+      //persist the data in the firebase firestore
+      const userRef = doc(db, 'users', globalUser.uid)
+      await updateDoc(userRef, {
+        [timestamp]: deleteField()
+      })
+    } catch (error) {
+      console.log(error)
+    }
+
+    // setTodos(newTodoList)
+    // handleSaveData(newTodoList)
   }
 
   function handleSaveData(currTodos) {

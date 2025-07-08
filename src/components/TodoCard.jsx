@@ -31,7 +31,7 @@ export function TodoCard(props) {
             </div>
             <div className="todo-buttons">
                 <button onClick={() => {
-                    handleCompleteTodo(todoIndex)
+                    handleCompleteTodo(todo[0])
                 }} disabled={todo[1].complete}>
                     <h6>Done</h6>
                 </button>
@@ -41,7 +41,7 @@ export function TodoCard(props) {
                     <h6>Edit</h6>
                 </button>
                 <button onClick={() => {
-                    handleDeleteTodo(todoIndex)
+                    handleDeleteTodo(todo[0])
                 }}>
                     <h6>Delete</h6>
                 </button>
