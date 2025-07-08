@@ -16,9 +16,9 @@ export function TodoCard(props) {
                         }} />
                         <button onClick={() => {
                             if (isStringEmpty(editValue)) {
-                                setEditValue(todo.input)
+                                setEditValue(todo[1].input)
                             } else {
-                                handleEditTodo(todoIndex, editValue, todo.complete)
+                                handleEditTodo(todoIndex, editValue, todo[1].complete)
                             }
                             setEditing(false)
                         }}>
@@ -26,13 +26,13 @@ export function TodoCard(props) {
                         </button>
                     </div>
                 ) : (
-                    <p>{todo.input}</p>
+                    <p>{todo[1].input}</p>
                 )}
             </div>
             <div className="todo-buttons">
                 <button onClick={() => {
                     handleCompleteTodo(todoIndex)
-                }} disabled={todo.complete}>
+                }} disabled={todo[1].complete}>
                     <h6>Done</h6>
                 </button>
                 <button onClick={() => {

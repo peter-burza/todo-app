@@ -7,22 +7,44 @@ import { TodoList } from "./components/TodoList"
 import { isStringEmpty } from './utils'
 import { useState, useEffect } from 'react'
 import { useAuth } from "./context/AuthContext"
-import {doc, setDoc} from 'firebase/firestore'
-import {db} from '../../firebase'
+import { doc, setDoc } from 'firebase/firestore'
+import { db } from '../firebase'
 
 function App() {
-  const [todos, setTodos] = useState([
-    { input: 'Hello! Add your first todo!', complete: false }
-  ])
+  const timestamp = Date.now()
+  const [todos, setTodos] = useState({
+    timestamp: { input: 'Hello! Add your first todo!', complete: false }
+  })
   const [selectedTab, setSelectedTab] = useState('Open')
   const [showModal, setShowModal] = useState(false)
   const { globalUser, globalData, setGlobalData } = useAuth()
+  const globalDataEntries = globalData ? Object.entries(globalData) : [];
 
-  function handleAddTodo(newTodo) {
-    if (isStringEmpty(newTodo)) return
-    const newTodoList = [...todos, { input: newTodo, complete: false }]
-    setTodos(newTodoList)
-    handleSaveData(newTodoList)
+  async function handleAddTodo(newTodoInput) {
+    if (isStringEmpty(newTodoInput)) return
+
+    try {
+      const newTodoList = {
+        ...(globalData || {})
+      }
+      const newTodo = {
+        input: newTodoInput,
+        complete: false
+      }
+      newTodoList[timestamp] = newTodo
+      console.log(timestamp, newTodo)
+
+      // update globalData
+      setGlobalData(newTodoList)
+
+      //persist the data in the firebase firestore
+      const userRef = doc(db, 'users', globalUser.uid)
+      const res = await setDoc(userRef, {
+        [timestamp]: newTodo
+      }, { merge: true })
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   function handleCompleteTodo(index) {
@@ -67,14 +89,14 @@ function App() {
 
   return (
     <>
-      <Header todos={todos} setShowModal={setShowModal} />
+      <Header globalDataEntries={globalDataEntries} setShowModal={setShowModal} />
       {showModal && (
         <Modal handleCloseModal={handleCloseModal}>
           <Authentication handleCloseModal={handleCloseModal} />
         </Modal>
       )}
-      <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} todos={todos} />
-      <TodoList handleCompleteTodo={handleCompleteTodo} handleDeleteTodo={handleDeleteTodo} handleEditTodo={handleEditTodo} selectedTab={selectedTab} todos={todos} />
+      <Tabs selectedTab={selectedTab} setSelectedTab={setSelectedTab} globalDataEntries={globalDataEntries} />
+      <TodoList handleCompleteTodo={handleCompleteTodo} handleDeleteTodo={handleDeleteTodo} handleEditTodo={handleEditTodo} selectedTab={selectedTab} globalDataEntries={globalDataEntries} />
       <TodoInput handleAddTodo={handleAddTodo} />
     </>
   )

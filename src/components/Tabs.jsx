@@ -1,15 +1,15 @@
 export function Tabs(props) {
-    const { todos, selectedTab, setSelectedTab } = props
+    const { globalDataEntries, selectedTab, setSelectedTab } = props
     const tabs = ['All', 'Open', 'Completed']
     return (
         <nav className="tab-container">
 
             {tabs.map((tab, tabIndex) => {
                 const numOfTasks = tab === 'All' ?
-                    todos.length :
+                    globalDataEntries.length :
                     tab === 'Open' ?
-                        todos.filter(val => !val.complete).length :
-                        todos.filter(val => val.complete).length
+                        globalDataEntries.filter(todo => !todo[1].complete).length :
+                        globalDataEntries.filter(todo => todo[1].complete).length
 
                 return (
                     <button onClick={() => {
