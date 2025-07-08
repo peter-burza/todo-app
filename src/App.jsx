@@ -5,16 +5,13 @@ import { Tabs } from "./components/Tabs"
 import { TodoInput } from "./components/TodoInput"
 import { TodoList } from "./components/TodoList"
 import { isStringEmpty } from './utils'
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useAuth } from "./context/AuthContext"
 import { doc, setDoc, updateDoc, deleteField } from 'firebase/firestore'
 import { db } from '../firebase'
 
 function App() {
   const timestamp = Date.now()
-  const [todos, setTodos] = useState({
-    timestamp: { input: 'Hello! Add your first todo!', complete: false }
-  })
   const [selectedTab, setSelectedTab] = useState('Open')
   const [showModal, setShowModal] = useState(false)
   const { globalUser, globalData, setGlobalData } = useAuth()
@@ -61,6 +58,7 @@ function App() {
 
       // update globalData
       setGlobalData(newTodoList)
+      if (!globalUser) return
 
       //persist the data in the firebase firestore
       const userRef = doc(db, 'users', globalUser.uid)
@@ -81,8 +79,10 @@ function App() {
   }
 
   async function saveDataOnFirestore(todoList, timeStamp, todo) {
+
     // update globalData
     setGlobalData(todoList)
+    if (!globalUser) return
 
     //persist the data in the firebase firestore
     const userRef = doc(db, 'users', globalUser.uid)
@@ -98,12 +98,6 @@ function App() {
   function handleCloseModal() {
     setShowModal(false)
   }
-
-  // useEffect(() => {
-  //   if (!localStorage || !localStorage.getItem('todo-app')) return
-  //   let db = JSON.parse(localStorage.getItem('todo-app'))
-  //   setTodos(db.todos)
-  // }, [])
 
   return (
     <>

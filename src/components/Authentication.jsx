@@ -18,6 +18,12 @@ export default function Authentication(props) {
                     !email.includes('@') ? "Email doesn't contain '@'" :
                         password.length < 8 ? 'Password should contain at least 8 characters' :
                             null;
+        const handleKeyDown = (event) => {
+            console.log('Pressed:', event.key);
+            if (event.key === 'Enter') {
+                setSearchedMovie(searchValue)
+            }
+        };
 
         if (isAuthenticating || error) {
             if (error) setErrorMessage(error);
@@ -51,8 +57,8 @@ export default function Authentication(props) {
             {
                 errorMessage && (<p style={{ color: '#ff0000', fontSize: '0.9rem', }}>{errorMessage}</p>)
             }
-            <input value={email} onChange={(e) => { setEmail(e.target.value) }} placeholder="Email" type="text" />
-            <input value={password} onChange={(e) => { setPassword(e.target.value) }} placeholder="*********" type="password" />
+            <input value={email} onKeyDown={handleKeyDown} onChange={(e) => { setEmail(e.target.value) }} placeholder="Email" type="text" />
+            <input value={password} onKeyDown={handleKeyDown} onChange={(e) => { setPassword(e.target.value) }} placeholder="*********" type="password" />
             <button onClick={handleAuthenticate}><p>{isAuthenticating ? 'Authenticating...' : 'Submit'}</p></button>
             <hr />
             <div className="register-content">
