@@ -8,8 +8,14 @@ export default function Authentication(props) {
     const [password, setPassword] = useState('')
     const [isAuthenticating, setIsAuthenticating] = useState(false)
     const [errorMessage, setErrorMessage] = useState(null)
-
     const { signup, login } = useAuth()
+
+    const handleKeyDown = (event) => {
+            // console.log('Pressed:', event.key);
+            if (event.key === 'Enter') {
+                handleAuthenticate()
+            }
+        };
 
     async function handleAuthenticate() {
         const error =
@@ -18,12 +24,6 @@ export default function Authentication(props) {
                     !email.includes('@') ? "Email doesn't contain '@'" :
                         password.length < 8 ? 'Password should contain at least 8 characters' :
                             null;
-        const handleKeyDown = (event) => {
-            console.log('Pressed:', event.key);
-            if (event.key === 'Enter') {
-                setSearchedMovie(searchValue)
-            }
-        };
 
         if (isAuthenticating || error) {
             if (error) setErrorMessage(error);

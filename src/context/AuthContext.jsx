@@ -59,7 +59,7 @@ export function AuthProvider(props) {
                 let firebaseData = {}
                 if (docSnap.exists()) {
                     firebaseData = docSnap.data()
-                    console.log('Found user data: ', firebaseData)
+                    // console.log('Found user data')
                 }
                 setGlobalData(firebaseData)
             } catch (err) {
