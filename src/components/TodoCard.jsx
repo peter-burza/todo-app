@@ -4,7 +4,7 @@ import { isStringEmpty } from '../utils'
 export function TodoCard(props) {
     const { todo, todoIndex, handleDeleteTodo, handleCompleteTodo, handleEditTodo } = props
     const [editing, setEditing] = useState(false)
-    const [editValue, setEditValue] = useState(todo.input)
+    const [editValue, setEditValue] = useState(todo[1].input)
 
     return (
         <div className="card todo-item">
@@ -16,9 +16,9 @@ export function TodoCard(props) {
                         }} />
                         <button onClick={() => {
                             if (isStringEmpty(editValue)) {
-                                setEditValue(todo.input)
+                                setEditValue(todo[1].input)
                             } else {
-                                handleEditTodo(todoIndex, editValue, todo.complete)
+                                handleEditTodo(todo[0], editValue, todo[1].complete)
                             }
                             setEditing(false)
                         }}>
@@ -26,13 +26,13 @@ export function TodoCard(props) {
                         </button>
                     </div>
                 ) : (
-                    <p>{todo.input}</p>
+                    <p>{todo[1].input}</p>
                 )}
             </div>
             <div className="todo-buttons">
                 <button onClick={() => {
-                    handleCompleteTodo(todoIndex)
-                }} disabled={todo.complete}>
+                    handleCompleteTodo(todo[0])
+                }} disabled={todo[1].complete}>
                     <h6>Done</h6>
                 </button>
                 <button onClick={() => {
@@ -41,7 +41,7 @@ export function TodoCard(props) {
                     <h6>Edit</h6>
                 </button>
                 <button onClick={() => {
-                    handleDeleteTodo(todoIndex)
+                    handleDeleteTodo(todo[0])
                 }}>
                     <h6>Delete</h6>
                 </button>
