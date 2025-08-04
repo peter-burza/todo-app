@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { useAuth } from '../context/AuthContext.jsx'
+import { handleKeyDown } from '../utils'
 
 export default function Authentication(props) {
     const { handleCloseModal } = props
@@ -9,13 +10,6 @@ export default function Authentication(props) {
     const [isAuthenticating, setIsAuthenticating] = useState(false)
     const [errorMessage, setErrorMessage] = useState(null)
     const { signup, login } = useAuth()
-
-    const handleKeyDown = (event) => {
-            // console.log('Pressed:', event.key);
-            if (event.key === 'Enter') {
-                handleAuthenticate()
-            }
-        };
 
     async function handleAuthenticate() {
         const error =
@@ -57,8 +51,8 @@ export default function Authentication(props) {
             {
                 errorMessage && (<p style={{ color: '#ff0000', fontSize: '0.9rem', }}>{errorMessage}</p>)
             }
-            <input value={email} onKeyDown={handleKeyDown} onChange={(e) => { setEmail(e.target.value) }} placeholder="Email" type="text" />
-            <input value={password} onKeyDown={handleKeyDown} onChange={(e) => { setPassword(e.target.value) }} placeholder="*********" type="password" />
+            <input value={email} onKeyDown={(event) => {handleKeyDown(event, handleAuthenticate)}} onChange={(e) => { setEmail(e.target.value) }} placeholder="Email" type="text" />
+            <input value={password} onKeyDown={(event) => {handleKeyDown(event, handleAuthenticate)}} onChange={(e) => { setPassword(e.target.value) }} placeholder="*********" type="password" />
             <button onClick={handleAuthenticate}><p>{isAuthenticating ? 'Authenticating...' : 'Submit'}</p></button>
             <hr />
             <div className="register-content">

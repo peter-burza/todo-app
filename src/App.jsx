@@ -24,13 +24,13 @@ function App() {
       const newTodoList = {
         ...(globalData || {})
       }
-      console.log(newTodoList)
+      // console.log(newTodoList)
       const newTodo = {
         input: newTodoInput,
         complete: false
       }
       newTodoList[timestamp] = newTodo
-      console.log(timestamp, newTodo)
+      // console.log(timestamp, newTodo)
 
       saveDataOnFirestore(newTodoList, timestamp, newTodo)
     } catch (error) {

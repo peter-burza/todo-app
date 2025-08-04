@@ -32,7 +32,6 @@ export default function AccountMenu() {
     }
 
     const { globalUser } = useAuth()
-    // const screenWidth = window.innerWidth
     return (
         <React.Fragment>
             <Box sx={{ display: 'flex', alignItems: 'center', textAlign: 'center' }}>

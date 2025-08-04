@@ -5,9 +5,18 @@ export function TodoCard(props) {
     const { todo, todoIndex, handleDeleteTodo, handleCompleteTodo, handleEditTodo } = props
     const [editing, setEditing] = useState(false)
     const [editValue, setEditValue] = useState(todo[1].input)
+    const [isWorkingOn, setIsWorkingOn] = useState(false)
+
+    function handleToggleWorkingOn(e) {
+        const target = e.target;
+        const container = e.currentTarget;
+        if (target === container || target.tagName === 'P' || (target.tagName === 'DIV' && target.contains(container.querySelector('p')))) {
+            setIsWorkingOn(!isWorkingOn)
+        }
+    }
 
     return (
-        <div className="card todo-item">
+        <div className={`card todo-item${(isWorkingOn && !todo[1].complete)  ? ' working-on' : ''}`} type="button" onClick={(e) => {handleToggleWorkingOn(e)}}>
             <div>
                 {editing ? (  // Decision if there will be displayed editing input
                     <div className="input-container">
