@@ -3,3 +3,9 @@ export function isStringEmpty(str) {
     if (isStrEmpty) return true
     return false
 }
+
+export function handleKeyDown(event, action) {
+        if (event.key === 'Enter') {
+            action()
+        }
+    }
