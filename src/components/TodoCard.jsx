@@ -16,7 +16,7 @@ export function TodoCard(props) {
     }
 
     return (
-        <div className={`card todo-item${isWorkingOn ? ' working-on' : ''}`} type="button" onClick={(e) => {handleToggleWorkingOn(e)}}>
+        <div className={`card todo-item${(isWorkingOn && !todo[1].complete)  ? ' working-on' : ''}`} type="button" onClick={(e) => {handleToggleWorkingOn(e)}}>
             <div>
                 {editing ? (  // Decision if there will be displayed editing input
                     <div className="input-container">
